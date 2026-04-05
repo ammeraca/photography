@@ -1,7 +1,7 @@
 .animated-images__container {
   position: relative;
-  width: 320px;
-  height: 420px;
+  width: min(420px, 80vw);
+  aspect-ratio: 3/4;
 }
 
 .animated-images__item {

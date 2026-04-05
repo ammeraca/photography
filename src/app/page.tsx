@@ -1,9 +1,8 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
 import { useScrollReveal } from "../hooks/useScrollReveal";
-import { useRef } from "react";
 import { AnimatedImages } from "@/components/AnimatedImages";
+import Button from "@/components/Button";
 
 const skills = [
 	"Militantisme",
@@ -55,12 +54,7 @@ export default function Home() {
 							commandes privées.
 						</p>
 						<div style={{ marginTop: "3rem" }}>
-							<Link
-								href="/contact"
-								className="btn btn--red"
-							>
-								Bouton Contact pour l'instant
-							</Link>
+							<Button link={"/galleries"}>Mon travail</Button>
 						</div>
 					</div>
 
