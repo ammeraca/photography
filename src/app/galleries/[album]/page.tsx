@@ -62,24 +62,27 @@ export default function AlbumPage() {
 					ref={ref as any}
 					style={gridStyle}
 				>
-					{images.map((src, i) => {
-						const orientation = orientations[i];
-						return (
-							<div
-								key={i}
-								className="reveal"
-								style={imgWrapStyle(orientation)}
-							>
-								<Image
-									src={src}
-									alt={`${album} ${i + 1}`}
-									fill
-									style={{ objectFit: "cover" }}
-									onLoad={(e) => handleLoad(i, e)}
-								/>
-							</div>
-						);
-					})}
+					{images
+						.slice()
+						.reverse()
+						.map((src, i) => {
+							const orientation = orientations[i];
+							return (
+								<div
+									key={i}
+									className="reveal"
+									style={imgWrapStyle(orientation)}
+								>
+									<Image
+										src={src}
+										alt={`${album} ${i + 1}`}
+										fill
+										style={{ objectFit: "cover" }}
+										onLoad={(e) => handleLoad(i, e)}
+									/>
+								</div>
+							);
+						})}
 				</div>
 			</div>
 		</div>

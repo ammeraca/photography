@@ -16,7 +16,7 @@ export default function Nav() {
 				href="/"
 				className="nav__logo"
 			>
-				Emma
+				Mama_clic
 			</Link>
 			<ul className="nav__links">
 				<li>

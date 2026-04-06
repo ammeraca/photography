@@ -36,7 +36,7 @@ export function useScrollReveal(opts: UseScrollRevealOptions = {}) {
 					stagger: opts.stagger ?? 0.12,
 					scrollTrigger: {
 						trigger: el,
-						markers: true,
+						// markers: true,
 						start: "50% 60%",
 						end: "bottom bottom",
 						toggleActions: "play none reverse none",
