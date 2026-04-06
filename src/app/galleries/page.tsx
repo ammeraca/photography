@@ -30,7 +30,7 @@ export default function Work() {
 		>
 			<div className="container">
 				<div style={{ marginBottom: "5rem" }}>
-					<Text variant="subtitle">Encore en construction</Text>
+					<Text variant="subtitle">Petit échantillon...</Text>
 					<Title
 						first="Mon"
 						second=" travail"

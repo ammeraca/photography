@@ -6,11 +6,11 @@ import { Title, Text } from "@/components/Text";
 
 const skills = [
 	"Militantisme",
-	"Street Photography",
+	"Street Photo",
+	"Évènementiel",
 	"Portraits",
 	"Voyage & Reportage",
 	"Culture",
-	"Noir & Blanc",
 ];
 
 export default function Home() {
@@ -37,17 +37,18 @@ export default function Home() {
 							second="Emma."
 						/>
 						<p style={bioStyle}>
-							Photographe indépendante basée en France, je travaille la lumière
-							naturelle comme matière première. Mon travail explore les
-							émotions, les territoires et les espaces entre les choses — là où
-							la réalité devient récit.
+							Photographe indépendante basée principalement à Paris, je
+							travaille essentiellement dans le milieu militant et engagé. Mon
+							travail explore le mouvement, les luttes, racontant des histoires
+							et des émotions au travers de l'instant, de la lumière.
 						</p>
 						<p style={bioStyle}>
-							Disponible pour des projets éditoriaux, des portraits et des
-							commandes privées.
+							Disponible pour des projets évènementiels, des actions militantes,
+							des portraits et toute commande privée.
 						</p>
+						<p style={bioStyle}>Mon mail : amme.rachlin@gmail.com</p>
 						<div style={{ marginTop: "3rem" }}>
-							<Button link={"/galleries"}>Mon travail</Button>
+							<Button link={"/galleries"}>Voir mon travail</Button>
 						</div>
 					</div>
 
@@ -86,8 +87,8 @@ export default function Home() {
 				>
 					<div style={statsStyle}>
 						{[
-							{ n: "6+", label: "Années d'expérience" },
-							{ n: "300+", label: "Projets réalisés" },
+							{ n: "3+", label: "Années d'expérience" },
+							{ n: "15+", label: "Projets réalisés" },
 							{ n: "12", label: "Pays photographiés" },
 						].map(({ n, label }) => (
 							<div
@@ -114,24 +115,6 @@ const heroStyle: React.CSSProperties = {
 	marginBottom: "8rem",
 };
 const heroTextStyle: React.CSSProperties = { maxWidth: "560px" };
-const heroImageStyle: React.CSSProperties = {
-	position: "relative",
-	height: "560px",
-	overflow: "hidden",
-};
-const imageOverlayStyle: React.CSSProperties = {
-	position: "absolute",
-	inset: 0,
-	background:
-		"linear-gradient(135deg, rgba(192,57,43,0.15) 0%, transparent 60%)",
-};
-const titleStyle: React.CSSProperties = {
-	fontFamily: "var(--font-display)",
-	fontWeight: 900,
-	fontSize: "clamp(3.5rem, 7vw, 6rem)",
-	lineHeight: 0.95,
-	marginBottom: "2rem",
-};
 const bioStyle: React.CSSProperties = {
 	fontFamily: "var(--font-mono)",
 	fontSize: "0.85rem",
@@ -156,9 +139,10 @@ const skillStyle: React.CSSProperties = {
 };
 const skillNumStyle: React.CSSProperties = {
 	fontFamily: "var(--font-display)",
+	color: "var(--red)",
 	fontSize: "2rem",
 	fontWeight: 900,
-	opacity: 0.15,
+	opacity: 0.5,
 	lineHeight: 1,
 };
 const skillNameStyle: React.CSSProperties = {

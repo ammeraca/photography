@@ -37,7 +37,7 @@ export function useScrollReveal(opts: UseScrollRevealOptions = {}) {
 					scrollTrigger: {
 						trigger: el,
 						// markers: true,
-						start: "50% 60%",
+						start: "top 80%",
 						end: "bottom bottom",
 						toggleActions: "play none reverse none",
 					},
