@@ -7,7 +7,7 @@ import { useReveal } from "@/hooks/useReveal";
 function albumImages(album: string, count: number): string[] {
 	return Array.from(
 		{ length: count },
-		(_, i) => `/images/galleries/${album}/${i + 1}.jpg`
+		(_, i) => `/images/galleries/${album}/${i + 1}.webp`
 	);
 }
 

@@ -17,17 +17,10 @@ export default function Home() {
 	const ref1 = useScrollReveal({ stagger: 0.5 });
 	const ref2 = useScrollReveal({ stagger: 0.5 });
 
-	const imgSources = [
-		"/images/galleries/first/1.jpg",
-		"/images/galleries/first/2.jpg",
-		"/images/galleries/first/3.jpg",
-		"/images/galleries/first/4.jpg",
-		"/images/galleries/first/5.jpg",
-		"/images/galleries/first/6.jpg",
-		"/images/galleries/first/7.jpg",
-		"/images/galleries/first/8.jpg",
-		"/images/galleries/first/9.jpg",
-	];
+	const imgSources = Array.from(
+		{ length: 9 },
+		(_, i) => `/images/galleries/first/${i + 1}.webp`
+	);
 
 	return (
 		<div

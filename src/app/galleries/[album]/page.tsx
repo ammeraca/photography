@@ -10,7 +10,7 @@ import { useState } from "react";
 function albumImages(album: string, count: number): string[] {
 	return Array.from(
 		{ length: count },
-		(_, i) => `/images/galleries/${album}/${i + 1}.jpg`
+		(_, i) => `/images/galleries/${album}/${i + 1}.webp`
 	);
 }
 
@@ -77,6 +77,8 @@ export default function AlbumPage() {
 										src={src}
 										alt={`${album} ${i + 1}`}
 										fill
+										sizes="100%"
+										loading="eager"
 										style={{ objectFit: "cover" }}
 										onLoad={(e) => handleLoad(i, e)}
 									/>
