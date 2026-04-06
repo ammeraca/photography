@@ -64,6 +64,10 @@ body {
   z-index: 9999;
 }
 
+.cursor__dot.is-hovering {
+  background: var(--red);
+}
+
 .cursor__ring {
   position: fixed;
   top: 0; left: 0;

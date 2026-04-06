@@ -1,8 +1,8 @@
 "use client";
-import Link from "next/link";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 import { AnimatedImages } from "@/components/AnimatedImages";
 import Button from "@/components/Button";
+import { Title, Text } from "@/components/Text";
 
 const skills = [
 	"Militantisme",
@@ -36,13 +36,13 @@ export default function Home() {
 			<div className="container">
 				<div style={heroStyle}>
 					<div style={heroTextStyle}>
-						<p style={eyebrowStyle}>
+						<Text variant="subtitle">
 							- Photographe militante engagée et féministe -
-						</p>
-						<h1 style={titleStyle}>
-							Je suis <br />
-							<em style={{ color: "var(--red)" }}>Emma.</em>
-						</h1>
+						</Text>
+						<Title
+							first={"Je suis \n"}
+							second="Emma."
+						/>
 						<p style={bioStyle}>
 							Photographe indépendante basée en France, je travaille la lumière
 							naturelle comme matière première. Mon travail explore les
@@ -67,12 +67,7 @@ export default function Home() {
 					ref={ref1}
 					style={sectionStyle}
 				>
-					<p
-						className="reveal"
-						style={eyebrowStyle}
-					>
-						— Mes domaines -
-					</p>
+					<Text variant="subtitle">Mes domaines de prédilection</Text>
 					<div style={skillsGridStyle}>
 						{skills.map((s, i) => (
 							<div
@@ -136,14 +131,6 @@ const imageOverlayStyle: React.CSSProperties = {
 	inset: 0,
 	background:
 		"linear-gradient(135deg, rgba(192,57,43,0.15) 0%, transparent 60%)",
-};
-const eyebrowStyle: React.CSSProperties = {
-	fontFamily: "var(--font-mono)",
-	fontSize: "0.7rem",
-	letterSpacing: "0.2em",
-	opacity: 0.4,
-	textTransform: "uppercase",
-	marginBottom: "1.5rem",
 };
 const titleStyle: React.CSSProperties = {
 	fontFamily: "var(--font-display)",

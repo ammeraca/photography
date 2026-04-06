@@ -29,8 +29,15 @@ export default function Cursor() {
 			rafId = requestAnimationFrame(animate);
 		};
 
-		const onEnter = () => ring.classList.add("is-hovering");
-		const onLeave = () => ring.classList.remove("is-hovering");
+		const onEnter = () => {
+			dot.classList.add("is-hovering");
+			ring.classList.add("is-hovering");
+		};
+
+		const onLeave = () => {
+			dot.classList.remove("is-hovering");
+			ring.classList.remove("is-hovering");
+		};
 
 		window.addEventListener("mousemove", onMove);
 		document
