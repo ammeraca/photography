@@ -12,11 +12,12 @@ function albumImages(album: string, count: number): string[] {
 }
 
 const albums = [
-	{ name: "engaged", count: 24 },
-	{ name: "blur", count: 12 },
-	{ name: "archi", count: 8 },
+	{ name: "activism", count: 24 },
+	{ name: "events", count: 16 },
+	{ name: "blurry", count: 12 },
+	{ name: "design", count: 8 },
 	{ name: "people", count: 16 },
-	{ name: "world", count: 29 },
+	{ name: "international", count: 29 },
 ];
 
 export default function Work() {

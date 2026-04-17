@@ -16,7 +16,6 @@ function albumImages(album: string, count: number): string[] {
 
 export default function AlbumPage() {
 	const params = useParams();
-	const router = useRouter();
 	const album = params.album as string;
 	const count = albumsConfig.find((a) => a.album === album)?.count ?? 0;
 	const first = albumsConfig.find((a) => a.album === album)?.first ?? "";
@@ -113,5 +112,5 @@ const imgWrapStyle = (
 	overflow: "hidden",
 	gridColumn: orientation === "landscape" ? "span 2" : "span 1",
 	gridRow: "span 1",
-	minHeight: orientation !== "landscape" ? undefined : "1fr",
+	minHeight: "1fr",
 });
