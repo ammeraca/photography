@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { onLoaderDone } from "@/lib/loader";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -24,28 +25,34 @@ export function useScrollReveal(opts: UseScrollRevealOptions = {}) {
 		);
 		if (!targets.length) return;
 
-		const ctx = gsap.context(() => {
-			gsap.fromTo(
-				targets,
-				{ opacity: 0, y: opts.y ?? 50 },
-				{
-					opacity: 1,
-					y: 0,
-					duration: opts.duration ?? 1.0,
-					ease: "power3.out",
-					stagger: opts.stagger ?? 0.12,
-					scrollTrigger: {
-						trigger: el,
-						// markers: true,
-						start: "top 80%",
-						end: "bottom bottom",
-						toggleActions: "play none reverse none",
-					},
-				}
-			);
-		}, el);
+		let ctx: gsap.Context | undefined;
+		const stop = onLoaderDone(() => {
+			ctx = gsap.context(() => {
+				gsap.fromTo(
+					targets,
+					{ opacity: 0, y: opts.y ?? 50 },
+					{
+						opacity: 1,
+						y: 0,
+						duration: opts.duration ?? 1.0,
+						ease: "power3.out",
+						stagger: opts.stagger ?? 0.12,
+						scrollTrigger: {
+							trigger: el,
+							// markers: true,
+							start: "top 80%",
+							end: "bottom bottom",
+							toggleActions: "play none reverse none",
+						},
+					}
+				);
+			}, el);
+		});
 
-		return () => ctx.revert();
+		return () => {
+			stop();
+			ctx?.revert();
+		};
 	}, [opts.selector, opts.stagger, opts.y, opts.duration]);
 
 	return containerRef;

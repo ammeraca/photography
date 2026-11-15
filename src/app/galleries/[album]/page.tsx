@@ -37,10 +37,10 @@ export default function AlbumPage() {
 
 	return (
 		<div
-			style={{ minHeight: "100vh", paddingTop: "9rem", paddingBottom: "8rem" }}
+			style={{ minHeight: "100vh", paddingTop: "clamp(6rem, 15vw, 9rem)", paddingBottom: "clamp(4rem, 10vw, 8rem)" }}
 		>
 			<div className="container">
-				<div style={headerStyle}>
+				<div className="album-header">
 					<ul className="nav__links">
 						<li>
 							<a href="/galleries">
@@ -59,7 +59,7 @@ export default function AlbumPage() {
 
 				<div
 					ref={ref as any}
-					style={gridStyle}
+					className="album-grid"
 				>
 					{images
 						.slice()
@@ -69,14 +69,17 @@ export default function AlbumPage() {
 							return (
 								<div
 									key={i}
-									className="reveal"
-									style={imgWrapStyle(orientation)}
+									className={`reveal album-grid__item${
+										orientation === "landscape"
+											? " album-grid__item--landscape"
+											: ""
+									}`}
 								>
 									<Image
 										src={src}
 										alt={`${album} ${i + 1}`}
 										fill
-										sizes="100%"
+										sizes="(max-width: 640px) 100vw, (max-width: 1400px) 50vw, 700px"
 										loading="eager"
 										style={{ objectFit: "cover" }}
 										onLoad={(e) => handleLoad(i, e)}
@@ -89,28 +92,3 @@ export default function AlbumPage() {
 		</div>
 	);
 }
-
-const headerStyle: React.CSSProperties = {
-	display: "flex",
-	alignItems: "center",
-	gap: "1.5rem",
-	marginBottom: "4rem",
-};
-
-const gridStyle: React.CSSProperties = {
-	display: "grid",
-	gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-	gridAutoRows: "auto",
-	gap: "1rem",
-};
-
-const imgWrapStyle = (
-	orientation: "landscape" | "portrait" | undefined
-): React.CSSProperties => ({
-	position: "relative",
-	aspectRatio: orientation === "landscape" ? "3 / 2" : "2 / 3",
-	overflow: "hidden",
-	gridColumn: orientation === "landscape" ? "span 2" : "span 1",
-	gridRow: "span 1",
-	minHeight: "1fr",
-});

@@ -24,11 +24,11 @@ export default function Home() {
 
 	return (
 		<div
-			style={{ minHeight: "100vh", paddingTop: "9rem", paddingBottom: "8rem" }}
+			style={{ minHeight: "100vh", paddingTop: "clamp(6rem, 15vw, 9rem)", paddingBottom: "clamp(4rem, 10vw, 8rem)" }}
 		>
 			<div className="container">
-				<div style={heroStyle}>
-					<div style={heroTextStyle}>
+				<div className="home-hero">
+					<div className="home-hero__text">
 						<Text variant="subtitle">
 							- Photographe militante engagée et féministe -
 						</Text>
@@ -46,13 +46,13 @@ export default function Home() {
 							Disponible pour des projets évènementiels, des actions militantes,
 							des portraits et toute commande privée.
 						</p>
-						<p style={bioStyle}>Mon mail : amme.rachlin@gmail.com</p>
+						<p style={{ ...bioStyle, overflowWrap: "anywhere" }}>Mon mail : amme.rachlin@gmail.com</p>
 						<div style={{ marginTop: "3rem" }}>
 							<Button link={"/galleries"}>Voir mon travail</Button>
 						</div>
 					</div>
 
-					<div>
+					<div className="home-hero__visual">
 						<AnimatedImages images={imgSources} />
 					</div>
 				</div>
@@ -85,7 +85,7 @@ export default function Home() {
 						paddingTop: "5rem",
 					}}
 				>
-					<div style={statsStyle}>
+					<div className="home-stats">
 						{[
 							{ n: "3+", label: "Années d'expérience" },
 							{ n: "15+", label: "Projets réalisés" },
@@ -107,14 +107,6 @@ export default function Home() {
 	);
 }
 
-const heroStyle: React.CSSProperties = {
-	display: "grid",
-	gridTemplateColumns: "1fr 400px",
-	gap: "6rem",
-	alignItems: "center",
-	marginBottom: "8rem",
-};
-const heroTextStyle: React.CSSProperties = { maxWidth: "560px" };
 const bioStyle: React.CSSProperties = {
 	fontFamily: "var(--font-mono)",
 	fontSize: "0.85rem",
@@ -149,11 +141,6 @@ const skillNameStyle: React.CSSProperties = {
 	fontFamily: "var(--font-display)",
 	fontSize: "1.1rem",
 	fontWeight: 900,
-};
-const statsStyle: React.CSSProperties = {
-	display: "grid",
-	gridTemplateColumns: "repeat(3, 1fr)",
-	gap: "2rem",
 };
 const statItemStyle: React.CSSProperties = {
 	display: "flex",

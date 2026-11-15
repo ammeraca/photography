@@ -23,14 +23,12 @@ const albums = [
 export default function Work() {
 	const ref = useReveal({ stagger: 0.5 });
 
-	console.log(albumImages("first", 9));
-
 	return (
 		<div
-			style={{ minHeight: "100vh", paddingTop: "10rem", paddingBottom: "8rem" }}
+			style={{ minHeight: "100vh", paddingTop: "clamp(6rem, 15vw, 10rem)", paddingBottom: "clamp(4rem, 10vw, 8rem)" }}
 		>
 			<div className="container">
-				<div style={{ marginBottom: "5rem" }}>
+				<div style={{ marginBottom: "clamp(3rem, 8vw, 5rem)" }}>
 					<Text variant="subtitle">Petit échantillon...</Text>
 					<Title
 						first="Mon"
@@ -40,12 +38,7 @@ export default function Work() {
 
 				<div
 					ref={ref as any}
-					style={{
-						display: "grid",
-						gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-						gap: "6rem 10rem",
-						justifyItems: "center",
-					}}
+					className="galleries-grid"
 				>
 					{albums.map((album) => (
 						<a
@@ -61,7 +54,7 @@ export default function Work() {
 							}}
 						>
 							<AnimatedImages
-								images={albumImages(album.name, album.count)}
+								images={albumImages(album.name, album.count).slice(-5)}
 								withAnimation={false}
 							/>
 							<p

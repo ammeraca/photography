@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Cursor from "@/components/Cursor";
 import Nav from "@/components/Nav";
+import Loader from "@/components/Loader";
 
 export const metadata: Metadata = {
 	title: "Emma - Photographe",
@@ -20,6 +21,7 @@ export default function RootLayout({
 			data-scroll-behaviour="smooth"
 		>
 			<body className="min-h-full flex flex-col">
+				<Loader />
 				<Cursor />
 				<Nav />
 				{children}

@@ -15,9 +15,11 @@ export const Title = ({ first, second }: TitleProps) => (
 		style={{
 			fontFamily: "var(--font-display)",
 			fontWeight: 900,
-			fontSize: "clamp(3.5rem, 7vw, 6rem)",
+			fontSize: "clamp(2.5rem, 9vw, 6rem)",
 			lineHeight: 0.95,
 			marginBottom: "2rem",
+			overflowWrap: "break-word",
+			hyphens: "auto",
 		}}
 	>
 		{first}

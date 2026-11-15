@@ -2,6 +2,7 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import "./AnimatedImages.css";
+import { onLoaderDone } from "@/lib/loader";
 
 interface AnimatedImagesProps {
 	images: string[];
@@ -37,7 +38,7 @@ export function AnimatedImages({
 				});
 			});
 
-			const tl = gsap.timeline({ delay: 0.5 });
+			const tl = gsap.timeline({ delay: 0.5, paused: true });
 			items.forEach((el, i) => {
 				const randomX = getRandomArbitrary(-20, 20);
 				const randomY = getRandomArbitrary(-20, 20);
@@ -56,10 +57,12 @@ export function AnimatedImages({
 					i * 0.12
 				);
 			});
+
+			return onLoaderDone(() => tl.play());
 		},
 		{ scope: containerRef }
 	);
-	const imagesToShow = withAnimation ? images : images.slice(-5);
+	const imagesToShow = images;
 
 	return (
 		<div
