@@ -29,27 +29,21 @@ export default function Cursor() {
 			rafId = requestAnimationFrame(animate);
 		};
 
-		const onEnter = () => {
-			dot.classList.add("is-hovering");
-			ring.classList.add("is-hovering");
-		};
-
-		const onLeave = () => {
-			dot.classList.remove("is-hovering");
-			ring.classList.remove("is-hovering");
+		// Délégation : marche aussi pour les éléments ajoutés après une navigation
+		const INTERACTIVE = "a, button, .btn, [data-cursor]";
+		const onOver = (e: MouseEvent) => {
+			const hovering = !!(e.target as Element | null)?.closest?.(INTERACTIVE);
+			dot.classList.toggle("is-hovering", hovering);
+			ring.classList.toggle("is-hovering", hovering);
 		};
 
 		window.addEventListener("mousemove", onMove);
-		document
-			.querySelectorAll("a, button, .btn, [data-cursor]")
-			.forEach((el) => {
-				el.addEventListener("mouseenter", onEnter);
-				el.addEventListener("mouseleave", onLeave);
-			});
+		document.addEventListener("mouseover", onOver);
 
 		animate();
 		return () => {
 			window.removeEventListener("mousemove", onMove);
+			document.removeEventListener("mouseover", onOver);
 			cancelAnimationFrame(rafId);
 		};
 	}, []);

@@ -32,6 +32,7 @@ const angleOf = (key: string) => MODES.find((m) => m.key === key)!.angle;
 const PATH = ["C3", "S", "C1", "A", "M"];
 
 const LABEL_R = 122;
+const SEEN_KEY = "loader-seen";
 const TICK_COUNT = 72;
 
 export default function Loader() {
@@ -42,6 +43,17 @@ export default function Loader() {
 
 	useGSAP(
 		() => {
+			// Déjà vu dans cet onglet : on ne rejoue pas le loader
+			let seen = false;
+			try {
+				seen = sessionStorage.getItem(SEEN_KEY) === "1";
+			} catch {}
+			if (seen) {
+				markLoaderDone();
+				setDone(true);
+				return;
+			}
+
 			document.documentElement.style.overflow = "hidden";
 			const dial = dialRef.current!;
 			const reduced = window.matchMedia(
@@ -131,6 +143,9 @@ export default function Loader() {
 						onUpdate: applyZoom,
 					});
 				document.documentElement.style.overflow = "";
+				try {
+					sessionStorage.setItem(SEEN_KEY, "1");
+				} catch {}
 				setDone(true);
 			});
 

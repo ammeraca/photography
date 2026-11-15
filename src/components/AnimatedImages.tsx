@@ -7,6 +7,8 @@ import { onLoaderDone } from "@/lib/loader";
 interface AnimatedImagesProps {
 	images: string[];
 	withAnimation?: boolean;
+	/** Au clic, la photo du dessus passe sous le paquet. */
+	shuffleOnClick?: boolean;
 }
 
 function getRandomArbitrary(min: number, max: number) {
@@ -16,11 +18,15 @@ function getRandomArbitrary(min: number, max: number) {
 export function AnimatedImages({
 	images,
 	withAnimation = true,
+	shuffleOnClick = false,
 }: AnimatedImagesProps) {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+	// Ordre d'empilement : du dessous (index 0) au dessus (dernier)
+	const orderRef = useRef<number[]>(images.map((_, i) => i));
+	const busyRef = useRef(true); // bloqué tant que l'intro n'est pas finie
 
-	useGSAP(
+	const { contextSafe } = useGSAP(
 		() => {
 			const items = itemRefs.current.filter(Boolean) as HTMLDivElement[];
 			if (!items.length) return;
@@ -38,7 +44,13 @@ export function AnimatedImages({
 				});
 			});
 
-			const tl = gsap.timeline({ delay: 0.5, paused: true });
+			const tl = gsap.timeline({
+				delay: 0.5,
+				paused: true,
+				onComplete: () => {
+					busyRef.current = false;
+				},
+			});
 			items.forEach((el, i) => {
 				const randomX = getRandomArbitrary(-20, 20);
 				const randomY = getRandomArbitrary(-20, 20);
@@ -62,12 +74,95 @@ export function AnimatedImages({
 		},
 		{ scope: containerRef }
 	);
+
+	// Prend la photo du dessus, la soulève hors du paquet puis la glisse dessous
+	const sendTopToBack = contextSafe(() => {
+		if (busyRef.current) return;
+		const order = orderRef.current;
+		if (order.length < 2) return;
+		busyRef.current = true;
+
+		const topIndex = order[order.length - 1];
+		const card = itemRefs.current[topIndex];
+		if (!card) return;
+		const height = card.offsetHeight;
+		const side = Math.random() < 0.5 ? -1 : 1;
+
+		const restack = () => {
+			order.pop();
+			order.unshift(topIndex);
+			order.forEach((itemIndex, z) => {
+				const el = itemRefs.current[itemIndex];
+				if (el) el.style.zIndex = String(z);
+			});
+		};
+
+		gsap
+			.timeline({
+				onComplete: () => {
+					busyRef.current = false;
+				},
+			})
+			// 1. On la saisit et on la fait glisser vers le haut, hors du paquet
+			.to(card, {
+				y: -height * 0.72,
+				x: side * getRandomArbitrary(200, 500),
+				rotation: side * getRandomArbitrary(4, 9),
+				scale: 1.03,
+				duration: 0.5,
+				ease: "power2.out",
+			})
+			// 2. Au sommet, elle passe derrière les autres
+			.add(restack)
+			// 3. Elle redescend se ranger sous le paquet
+			.to(card, {
+				x: getRandomArbitrary(-20, 20),
+				y: getRandomArbitrary(-20, 20),
+				rotation: getRandomArbitrary(-5, 5),
+				scale: 1,
+				duration: 0.65,
+				ease: "power3.inOut",
+			})
+			// Le reste du paquet bouge à peine, comme tenu dans la main
+			.to(
+				order
+					.slice(0, -1)
+					.map((i) => itemRefs.current[i])
+					.filter(Boolean),
+				{
+					y: "-=4",
+					duration: 0.25,
+					ease: "power1.out",
+					yoyo: true,
+					repeat: 1,
+				},
+				0
+			);
+	});
+
+	const interactiveProps = shuffleOnClick
+		? {
+				role: "button",
+				tabIndex: 0,
+				"aria-label": "Photo suivante",
+				"data-cursor": "",
+				onClick: sendTopToBack,
+				onKeyDown: (e: React.KeyboardEvent) => {
+					if (e.key === "Enter" || e.key === " ") {
+						e.preventDefault();
+						sendTopToBack();
+					}
+				},
+			}
+		: {};
+
 	const imagesToShow = images;
 
 	return (
 		<div
 			ref={containerRef}
 			className="animated-images__container"
+			{...interactiveProps}
 		>
 			{imagesToShow.map((src, i) => (
 				<div

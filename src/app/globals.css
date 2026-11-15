@@ -40,7 +40,9 @@ body {
   font-family: var(--font-mono);
   font-weight: 300;
   line-height: 1.6;
-  overflow-x: hidden;
+  /* clip (et non hidden) : hidden ferait de body un conteneur de scroll et
+     casserait les animations liées au scroll de la page */
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -239,18 +241,55 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* ── Home ────────────────────────────────────────────────────────────────────── */
-.home-hero {
-  display: grid;
-  grid-template-columns: 1fr 400px;
-  gap: 6rem;
-  align-items: center;
-  margin-bottom: 8rem;
-}
-.home-hero__text { max-width: 560px; }
 .home-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
+}
+
+/* Titre au-dessus, photos + présentation côte à côte */
+.home-hero {
+  display: grid;
+  grid-template-columns: auto minmax(0, 400px);
+  grid-template-areas:
+    "head   head"
+    "photos about";
+  justify-content: center;
+  align-items: center;
+  column-gap: 3.5rem;
+  margin-bottom: 8rem;
+}
+.home-hero__head {
+  grid-area: head;
+  text-align: center;
+  margin-bottom: 4.5rem;
+}
+.home-hero__kicker {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  opacity: 0.45;
+  margin-bottom: 1.5rem;
+}
+.home-hero__title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(3rem, 7.5vw, 7rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+.home-hero__title em { color: var(--red); }
+.home-hero__photos {
+  grid-area: photos;
+  position: relative;
+  z-index: 1;
+}
+.home-hero__photos .animated-images__container {
+  width: min(500px, 86vw);
+}
+.home-hero__about {
+  grid-area: about;
 }
 
 /* ── Galleries ───────────────────────────────────────────────────────────────── */
@@ -269,29 +308,117 @@ a { color: inherit; text-decoration: none; }
   margin-bottom: 4rem;
 }
 .album-header h1 { margin-bottom: 0 !important; }
+/* Photos étalées les unes sur les autres : pas d'espace entre les cases, et
+   chaque photo déborde de sa case (marge négative) pour mordre sur ses voisines. */
 .album-grid {
+  /* débordement de chaque photo sur ses voisines : faible sur les côtés (on
+     voit bien chaque photo d'une rangée), plus marqué en hauteur */
+  /* --overlap-x: 0rem; */
+  /* --overlap-y: 0.5rem; */
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1rem;
+  /* comble les trous laissés par les paysages (2 cases) : rangées pleines */
+  grid-auto-flow: dense;
+  /* l'empilement des photos (z-index) reste à l'intérieur de la grille :
+     le compteur et la navigation passent toujours au-dessus */
+  isolation: isolate;
+  gap: 0;
+  padding: calc(var(--overlap-y) + 0.75rem) calc(var(--overlap-x) + 0.75rem);
 }
+/* Chaque photo est posée un peu de travers, comme étalée à la main.
+   (propriétés rotate / translate séparées : elles ne gênent pas les animations GSAP) */
 .album-grid__item {
   position: relative;
-  overflow: hidden;
+  margin: calc(var(--overlap-y) * -1) calc(var(--overlap-x) * -1);
   aspect-ratio: 2 / 3;
+  rotate: var(--r, 0deg);
+  translate: var(--tx, 0px) var(--ty, 0px);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.55);
 }
 .album-grid__item--landscape {
   aspect-ratio: 3 / 2;
   grid-column: span 2;
+}
+/* Ouverture depuis « Mon travail » : cachée jusqu'à l'arrivée de sa copie volante */
+.album-grid__item--pending,
+.album-grid__item--fade { opacity: 0; }
+
+/* Compteur de photo pendant le scroll */
+.album-counter {
+  position: fixed;
+  right: 2rem;
+  bottom: 2rem;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  padding: 0.6rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(10, 10, 10, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.album-counter.is-visible { opacity: 1; }
+.album-counter__current {
+  display: inline-block;
+  min-width: 2ch;
+  text-align: right;
+  color: var(--white);
+  font-weight: 500;
+}
+.album-counter__total { opacity: 0.5; }
+.album-counter__track {
+  position: relative;
+  width: 70px;
+  height: 1px;
+  background: rgba(242, 237, 230, 0.2);
+  overflow: hidden;
+}
+.album-counter__bar {
+  position: absolute;
+  inset: 0;
+  background: var(--red);
+  transform-origin: left center;
+  transform: scaleX(var(--p, 0));
+}
+
+/* Photos qui s'étalent entre « Mon travail » et l'album */
+.flying-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+}
+.flying-photo {
+  position: fixed;
+  will-change: left, top, width, height, transform;
+}
+.flying-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
 }
 
 /* ── Tablet ──────────────────────────────────────────────────────────────────── */
 @media (max-width: 960px) {
   .home-hero {
     grid-template-columns: 1fr;
-    gap: 4rem;
-    margin-bottom: 5rem;
+    grid-template-areas: "head" "photos" "about";
+    justify-items: center;
   }
-  .home-hero__visual { display: flex; justify-content: center; }
+  .home-hero__about {
+    max-width: 560px;
+    margin-top: 4rem;
+    text-align: center;
+  }
   .galleries-grid { gap: 5rem 3rem; }
 }
 
@@ -301,13 +428,20 @@ a { color: inherit; text-decoration: none; }
   .nav { padding: 1rem 1.25rem; }
 
   .home-stats { grid-template-columns: 1fr; gap: 0; }
+  .home-hero { margin-bottom: 5rem; }
+  .home-hero__head { margin-bottom: 2.5rem; }
+  .home-hero__about { margin-top: 3rem; }
 
   .galleries-grid { grid-template-columns: 1fr; gap: 4rem; }
 
   .album-header { gap: 0.75rem; margin-bottom: 2.5rem; }
   .album-header svg { width: 32px; height: 32px; }
-  .album-grid { grid-template-columns: 1fr; }
+  .album-grid { grid-template-columns: 1fr; --overlap-y: 1rem; }
+  /* Sur une seule colonne, on ne déborde qu'en hauteur */
+  .album-grid__item { margin-inline: 0; }
   .album-grid__item--landscape { grid-column: auto; }
+  .album-counter { right: 1.25rem; bottom: 1.25rem; font-size: 0.7rem; }
+  .album-counter__track { width: 44px; }
 }
 
 /* ── Loader (molette) ────────────────────────────────────────────────────────── */
@@ -320,6 +454,7 @@ a { color: inherit; text-decoration: none; }
   justify-content: center;
   background: var(--black);
 }
+html.loader-seen .loader { display: none; }
 .loader__inner {
   display: flex;
   flex-direction: column;
@@ -389,3 +524,13 @@ a { color: inherit; text-decoration: none; }
   letter-spacing: 0.05em;
 }
 .loader__caption-sep { margin: 0 0.6em; opacity: 0.5; }
+
+/* ── Protection des photos ─────────────────────────────────────────────────────
+   Pas de menu « Enregistrer dans Photos » à l'appui long (iOS), pas de
+   sélection ni de glisser-déposer. (Clic droit : voir ImageProtection.tsx) */
+img {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
