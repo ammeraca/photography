@@ -31,12 +31,23 @@ export function AnimatedImages({
 			const items = itemRefs.current.filter(Boolean) as HTMLDivElement[];
 			if (!items.length) return;
 
-			const width = window.innerWidth;
+			// Décalage pour que le paquet parte entièrement hors de l'écran, à
+			// droite, quelles que soient la largeur de l'écran et l'inclinaison
+			// de départ (jusqu'à 60° : la photo inclinée déborde de sa boîte).
+			const box = containerRef.current!.getBoundingClientRect();
+			const offscreenX = (el: HTMLElement) => {
+				const w = el.offsetWidth;
+				const h = el.offsetHeight;
+				return window.innerWidth - box.left + (Math.hypot(w, h) - w) / 2 + 40;
+			};
 
+			// Point de départ hors de l'écran. Les photos sont cachées en CSS
+			// jusqu'ici (…--intro) : on ne les voit jamais à leur place avant
+			// l'animation, même si le JavaScript arrive tard (mobile).
 			items.forEach((el, i) => {
 				if (!withAnimation) return;
 				gsap.set(el, {
-					x: width,
+					x: offscreenX(el),
 					y: -100 - i * 40,
 					rotation: (i % 2 === 0 ? -1 : 1) * (20 + i * 5),
 					opacity: 1,
@@ -147,7 +158,9 @@ export function AnimatedImages({
 	return (
 		<div
 			ref={containerRef}
-			className="animated-images__container"
+			className={`animated-images__container${
+				withAnimation ? " animated-images__container--intro" : ""
+			}`}
 			{...interactiveProps}
 		>
 			{imagesToShow.map((src, i) => (

@@ -1,22 +1,10 @@
 "use client";
-import { useScrollReveal } from "../hooks/useScrollReveal";
 import { AnimatedImages } from "@/components/AnimatedImages";
 import Button from "@/components/Button";
-import { Text } from "@/components/Text";
-
-const skills = [
-	"Militantisme",
-	"Street Photo",
-	"Évènementiel",
-	"Portraits",
-	"Voyage & Reportage",
-	"Culture",
-];
+import Skills from "@/components/home/Skills";
+import Stats from "@/components/home/Stats";
 
 export default function Home() {
-	const ref1 = useScrollReveal({ stagger: 0.5 });
-	const ref2 = useScrollReveal({ stagger: 0.5 });
-
 	const imgSources = Array.from(
 		{ length: 9 },
 		(_, i) => `/images/galleries/first/${i + 1}.webp`
@@ -60,7 +48,13 @@ export default function Home() {
 							des portraits et toute commande privée.
 						</p>
 						<p style={{ ...bioStyle, overflowWrap: "anywhere" }}>
-							Mon mail : amme.rachlin@gmail.com
+							Mon mail :{" "}
+							<a
+								href="mailto:amme.rachlin@gmail.com"
+								className="home-hero__mail"
+							>
+								amme.rachlin@gmail.com
+							</a>
 						</p>
 						<div style={{ marginTop: "2.5rem" }}>
 							<Button link={"/galleries"}>Voir mon travail</Button>
@@ -68,51 +62,8 @@ export default function Home() {
 					</div>
 				</section>
 
-				<section
-					ref={ref1}
-					style={sectionStyle}
-				>
-					<Text variant="subtitle">Mes domaines de prédilection</Text>
-					<div style={skillsGridStyle}>
-						{skills.map((s, i) => (
-							<div
-								key={s}
-								className="reveal"
-								style={skillStyle}
-							>
-								<span style={skillNumStyle}>0{i + 1}</span>
-								<span style={skillNameStyle}>{s}</span>
-							</div>
-						))}
-					</div>
-				</section>
-
-				{/* Stats */}
-				<section
-					ref={ref2}
-					style={{
-						...sectionStyle,
-						borderTop: "1px solid rgba(255,255,255,0.06)",
-						paddingTop: "5rem",
-					}}
-				>
-					<div className="home-stats">
-						{[
-							{ n: "3+", label: "Années d'expérience" },
-							{ n: "15+", label: "Projets réalisés" },
-							{ n: "12", label: "Pays photographiés" },
-						].map(({ n, label }) => (
-							<div
-								key={label}
-								className="reveal"
-								style={statItemStyle}
-							>
-								<span style={statNumStyle}>{n}</span>
-								<span style={statLabelStyle}>{label}</span>
-							</div>
-						))}
-					</div>
-				</section>
+				<Skills />
+				<Stats />
 			</div>
 		</div>
 	);
@@ -124,52 +75,4 @@ const bioStyle: React.CSSProperties = {
 	opacity: 0.65,
 	lineHeight: 1.8,
 	marginBottom: "1rem",
-};
-const sectionStyle: React.CSSProperties = { marginBottom: "6rem" };
-const skillsGridStyle: React.CSSProperties = {
-	display: "grid",
-	gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-	gap: "1px",
-	marginTop: "2rem",
-	border: "1px solid rgba(255,255,255,0.06)",
-};
-const skillStyle: React.CSSProperties = {
-	display: "flex",
-	flexDirection: "column",
-	gap: "0.5rem",
-	padding: "2rem 1.5rem",
-	borderRight: "1px solid rgba(255,255,255,0.06)",
-};
-const skillNumStyle: React.CSSProperties = {
-	fontFamily: "var(--font-display)",
-	color: "var(--red)",
-	fontSize: "2rem",
-	fontWeight: 900,
-	opacity: 0.5,
-	lineHeight: 1,
-};
-const skillNameStyle: React.CSSProperties = {
-	fontFamily: "var(--font-display)",
-	fontSize: "1.1rem",
-	fontWeight: 900,
-};
-const statItemStyle: React.CSSProperties = {
-	display: "flex",
-	flexDirection: "column",
-	gap: "0.5rem",
-	padding: "2rem 0",
-	borderBottom: "3px solid var(--red)",
-};
-const statNumStyle: React.CSSProperties = {
-	fontFamily: "var(--font-display)",
-	fontSize: "3.5rem",
-	fontWeight: 900,
-	lineHeight: 1,
-};
-const statLabelStyle: React.CSSProperties = {
-	fontFamily: "var(--font-mono)",
-	fontSize: "0.7rem",
-	letterSpacing: "0.15em",
-	opacity: 0.5,
-	textTransform: "uppercase",
 };

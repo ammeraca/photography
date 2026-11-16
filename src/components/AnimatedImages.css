@@ -22,3 +22,9 @@
   user-select: none;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
 }
+
+/* Avant l'animation d'arrivée : photos cachées (rendues visibles par GSAP une
+   fois placées hors de l'écran) */
+.animated-images__container--intro .animated-images__item {
+  opacity: 0;
+}

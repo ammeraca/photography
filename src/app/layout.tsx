@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Cursor from "@/components/Cursor";
 import Nav from "@/components/Nav";
+import Footer from "@/components/Footer";
 import Loader from "@/components/Loader";
 import AlbumTransitionLayer from "@/components/AlbumTransitionLayer";
 import ImageProtection from "@/components/ImageProtection";
@@ -36,6 +37,7 @@ export default function RootLayout({
 				<Cursor />
 				<Nav />
 				{children}
+				<Footer />
 				<AlbumTransitionLayer />
 				<ImageProtection />
 			</body>
