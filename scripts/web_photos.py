@@ -6,7 +6,7 @@
 Chaque version web est :
   - réduite à MAX_SIDE px sur son plus grand côté (assez pour l'écran, trop
     petit pour un tirage) ;
-  - signée d'un filigrane discret en bas à droite.
+  - signée d'un filigrane discret en bas à droite, si WATERMARK n'est pas vide.
 
 On peut relancer le script autant de fois qu'on veut : il repart toujours des
 originaux (pas de double filigrane). Après avoir ajouté des photos dans
@@ -24,7 +24,7 @@ OUT = ROOT / "public" / "images" / "galleries"
 
 MAX_SIDE = 1600
 QUALITY = 82
-WATERMARK = "© Mama_clic"
+WATERMARK = ""  # ex. "© Mama_clic" ; vide = pas de filigrane
 FONT = "/System/Library/Fonts/Supplemental/Georgia Italic.ttf"
 TEXT_OPACITY = 0.55  # 0 = invisible, 1 = blanc plein
 FONT_RATIO = 0.024  # taille du texte / plus grand côté de la photo
@@ -33,6 +33,8 @@ MARGIN_RATIO = 0.025  # marge au bord / plus grand côté
 
 def watermark(img: Image.Image) -> Image.Image:
     img = img.convert("RGB")
+    if not WATERMARK:
+        return img
     side = max(img.size)
     font = ImageFont.truetype(FONT, max(14, round(side * FONT_RATIO)))
     margin = round(side * MARGIN_RATIO)

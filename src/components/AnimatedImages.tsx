@@ -108,7 +108,7 @@ export function AnimatedImages({
 				y: -height * 0.72,
 				x: side * getRandomArbitrary(200, 500),
 				rotation: side * getRandomArbitrary(4, 9),
-				scale: 1.03,
+				scale: 1.1,
 				duration: 0.5,
 				ease: "power2.out",
 			})
@@ -120,24 +120,10 @@ export function AnimatedImages({
 				y: getRandomArbitrary(-20, 20),
 				rotation: getRandomArbitrary(-5, 5),
 				scale: 1,
-				duration: 0.65,
+				duration: 0.5,
 				ease: "power3.inOut",
-			})
-			// Le reste du paquet bouge à peine, comme tenu dans la main
-			.to(
-				order
-					.slice(0, -1)
-					.map((i) => itemRefs.current[i])
-					.filter(Boolean),
-				{
-					y: "-=4",
-					duration: 0.25,
-					ease: "power1.out",
-					yoyo: true,
-					repeat: 1,
-				},
-				0
-			);
+			});
+		// (le reste du paquet ne bouge pas : seule la photo du dessus se déplace)
 	});
 
 	const interactiveProps = shuffleOnClick
